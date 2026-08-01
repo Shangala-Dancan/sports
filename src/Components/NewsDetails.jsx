@@ -13,7 +13,7 @@ const NewsDetails = () => {
 
   useEffect(() => {
     fetchNews();
-  }, [id]);
+  }, [id, fetchNews]);
 
   const fetchNews = async () => {
     try {

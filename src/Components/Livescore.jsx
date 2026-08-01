@@ -11,7 +11,7 @@ const API_BASE = "https://shangala.pythonanywhere.com/api";
 const MATCHES_POLL_MS = 5000;
 const DETAIL_POLL_MS = 4000;
 
-const LINEUP_SIZE = 6;
+// const LINEUP_SIZE = 6;
 
 const STAT_FIELDS = [
   { key: "aces", label: "Ace" },
