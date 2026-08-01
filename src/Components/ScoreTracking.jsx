@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useRef, useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const API_BASE = "http://127.0.0.1:5000/api";
+const API_BASE = "https://shangala.pythonanywhere.com/api";
 
 const POINTS_TO_WIN = 25;
 const DECIDER_POINTS_TO_WIN = 15;

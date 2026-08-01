@@ -99,13 +99,13 @@ const PlayerDetails = () => {
     const [statsLoading, setStatsLoading] = useState(true);
     const [statsError, setStatsError] = useState("");
 
-    const imgurl = "http://127.0.0.1:5000/static/images/";
+    const imgurl = "https://shangala.pythonanywhere.com/static/images/";
 
     const getPlayer = async () => {
         setLoading(true);
         setError("");
         try {
-            const response = await axios.get(`http://127.0.0.1:5000/api/get_players/${id}`)
+            const response = await axios.get(`https://shangala.pythonanywhere.com/api/get_players/${id}`)
 
             setPlayer(response.data);
             const formattedData = `
@@ -128,7 +128,7 @@ Age: ${response.data?.age}
         setStatsLoading(true);
         setStatsError("");
         try {
-            const response = await axios.get(`http://127.0.0.1:5000/api/get_season_stats`);
+            const response = await axios.get(`https://shangala.pythonanywhere.com/api/get_season_stats`);
             const row = (response.data || []).find((r) => String(r.player_id) === String(id));
             setSeasonStats(row || null);
         } catch (err) {

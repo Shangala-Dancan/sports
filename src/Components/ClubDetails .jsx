@@ -9,7 +9,7 @@ const ClubDetails = () => {
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState("");
 
-  const imgurl = "http://127.0.0.1:5000/static/images/";
+  const imgurl = "https://shangala.pythonanywhere.com/static/images/";
 
   // Get club details
   const getClub = async () => {
@@ -17,7 +17,7 @@ const ClubDetails = () => {
       setLoading("Loading club details...");
 
       const response = await axios.get(
-        `http://127.0.0.1:5000/api/get_club/${id}`
+        `https://shangala.pythonanywhere.com/api/get_club/${id}`
       );
 
       setClub(response.data);
@@ -32,7 +32,7 @@ const ClubDetails = () => {
   const getPlayers = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:5000/api/club_players/${id}`
+        `https://shangala.pythonanywhere.com/api/club_players/${id}`
       );
 
       setPlayers(response.data);

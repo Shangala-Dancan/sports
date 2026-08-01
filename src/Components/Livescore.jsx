@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const API_BASE = "http://127.0.0.1:5000/api";
+const API_BASE = "https://shangala.pythonanywhere.com/api";
 
 // Spectator view polls instead of pushing changes, since there's nothing to
 // edit here — just three independent refresh loops for the three things

@@ -25,7 +25,7 @@ const Signup = () => {
     formData.append("pending","user"); // default role (admin approves later)
 
     axios
-      .post("http://127.0.0.1:5000/api/register", formData)
+      .post("https://shangala.pythonanywhere.com/api/register", formData)
       .then((res) => {
         setMessage(res.data.message);
 

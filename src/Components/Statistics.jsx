@@ -53,7 +53,7 @@ const COLUMN_LABELS = {
   total: "Total",
 };
 
-const imgUrl = "http://127.0.0.1:5000/static/images/";
+const imgUrl = "https://shangala.pythonanywhere.com/static/images/";
 
 // Derive total and success_pct from points/errors/attempts instead of
 // trusting whatever the backend sends for those two fields.
@@ -89,7 +89,7 @@ const Statistics = () => {
       setLoading("Loading statistics...");
       setError("");
       const response = await axios.get(
-        "http://127.0.0.1:5000/api/get_leaderboard",
+        "https://shangala.pythonanywhere.com/api/get_leaderboard",
         { params: { gender: currentGender, category: currentCategory } }
       );
       setData(response.data);

@@ -47,13 +47,13 @@ const Players = () => {
 
   const [toast, setToast] = useState("");
 
-  const imgUrl = "http://127.0.0.1:5000/static/images/";
+  const imgUrl = "https://shangala.pythonanywhere.com/static/images/";
 
   // Fetch Players (live/approved roster only)
   const getPlayers = async () => {
     try {
       setLoading("Loading players...");
-      const response = await axios.get("http://127.0.0.1:5000/api/get_player");
+      const response = await axios.get("https://shangala.pythonanywhere.com/api/get_player");
       setPlayers(response.data);
       setLoading("");
     } catch (err) {
@@ -74,7 +74,7 @@ const Players = () => {
   // Fetch Clubs
   const getClubs = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:5000/api/get_club");
+      const response = await axios.get("https://shangala.pythonanywhere.com/api/get_club");
       setClubs(response.data);
     } catch (err) {
       setError(err.message);
@@ -87,7 +87,7 @@ const Players = () => {
       setPendingLoading("Loading pending players...");
       setPendingError("");
       const response = await axios.get(
-        "http://127.0.0.1:5000/api/get_pending_players"
+        "https://shangala.pythonanywhere.com/api/get_pending_players"
       );
       setPendingPlayers(response.data || []);
       setPendingLoading("");
@@ -115,7 +115,7 @@ const Players = () => {
       formData.append("club_id", clubId);
       formData.append("image", profileImage);
 
-      await axios.post("http://127.0.0.1:5000/api/add_player", formData, {
+      await axios.post("https://shangala.pythonanywhere.com/api/add_player", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -237,7 +237,7 @@ const Players = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5000/api/mpesa/initiate",
+        "https://shangala.pythonanywhere.com/api/mpesa/initiate",
         {
           club_id: clubIdKey,
           phone,
@@ -269,7 +269,7 @@ const Players = () => {
     const interval = setInterval(async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:5000/api/mpesa/status/${checkoutRequestId}`
+          `https://shangala.pythonanywhere.com/api/mpesa/status/${checkoutRequestId}`
         );
         const status = response.data?.status;
 
@@ -350,7 +350,7 @@ const Players = () => {
     setPendingError("");
     try {
       await axios.put(
-        `http://127.0.0.1:5000/api/approve_player/${playerId}`
+        `https://shangala.pythonanywhere.com/api/approve_player/${playerId}`
       );
       setPendingPlayers((prev) => prev.filter((p) => p.id !== playerId));
       setToast("Player approved and saved to the roster.");
@@ -380,7 +380,7 @@ const Players = () => {
       if (rejectReason.trim()) payload.append("reason", rejectReason.trim());
 
       await axios.put(
-        `http://127.0.0.1:5000/api/reject_player/${playerId}`,
+        `https://shangala.pythonanywhere.com/api/reject_player/${playerId}`,
         payload
       );
       setPendingPlayers((prev) => prev.filter((p) => p.id !== playerId));

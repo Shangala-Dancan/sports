@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const API_BASE = "http://127.0.0.1:5000";
+const API_BASE = "https://shangala.pythonanywhere.com";
 
 // Same divisions used in Schedule.jsx. If your clubs table doesn't carry
 // a `gender` field yet, this filter just shows every club under "All" -

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Modal } from "bootstrap";
 
-const API_BASE = "http://127.0.0.1:5000";
+const API_BASE = "https://shangala.pythonanywhere.com";
 
 // list of competitions available. Add more here if needed later.
 const COMPETITIONS = ["KVL", "Kenya Cup"];

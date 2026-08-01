@@ -3,8 +3,8 @@ import "./Nav.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API_BASE_URL = "http://127.0.0.1:5000/api";
-const IMG_BASE_URL = "http://127.0.0.1:5000/static/images/";
+const API_BASE_URL = "https://shangala.pythonanywhere.com/api";
+const IMG_BASE_URL = "https://shangala.pythonanywhere.com/static/images/";
 
 const EMPTY_CLUB = {
   name: "",

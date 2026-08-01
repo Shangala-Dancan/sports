@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const ViewNews = () => {
   const [news, setNews] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const imgurl = "http://127.0.0.1:5000/static/images/";
+  const imgurl = "https://shangala.pythonanywhere.com/static/images/";
   const navigate=useNavigate();
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const ViewNews = () => {
 
   const fetchNews = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:5000/news");
+      const res = await axios.get("https://shangala.pythonanywhere.com/news");
       setNews(res.data || []);
     } catch (error) {
       console.log(error);
@@ -42,7 +42,7 @@ const ViewNews = () => {
     }
 
     try {
-      await axios.post("http://127.0.0.1:5000/add_news", formData);
+      await axios.post("https://shangala.pythonanywhere.com/add_news", formData);
 
       alert("News added successfully");
 

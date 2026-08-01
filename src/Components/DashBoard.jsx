@@ -12,12 +12,12 @@ const DashBoard = () => {
   const [liveMatches, setLiveMatches] = useState([]);
   const [news, setNews] = useState([]);
 
-  const imgurl = "http://127.0.0.1:5000/static/images/";
+  const imgurl = "https://shangala.pythonanywhere.com/static/images/";
 
    // ✅ FETCH NEWS
   const fetchNews = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:5000/news");
+      const res = await axios.get("https://shangala.pythonanywhere.com/news");
       setNews(res.data || []);
     } catch (error) {
       console.log(error);
@@ -26,10 +26,10 @@ const DashBoard = () => {
   // Fetch dashboard data
   const getDashboardData = async () => {
     try {
-      const clubsRes = await axios.get("http://127.0.0.1:5000/api/get_club");
-      const playersRes = await axios.get("http://127.0.0.1:5000/api/get_player");
-      const matchesRes = await axios.get("http://127.0.0.1:5000/api/get_matches");
-      const liveRes = await axios.get("http://127.0.0.1:5000/api/live_matches");
+      const clubsRes = await axios.get("https://shangala.pythonanywhere.com/api/get_club");
+      const playersRes = await axios.get("https://shangala.pythonanywhere.com/api/get_player");
+      const matchesRes = await axios.get("https://shangala.pythonanywhere.com/api/get_matches");
+      const liveRes = await axios.get("https://shangala.pythonanywhere.com/api/live_matches");
       setClubs(clubsRes.data);
       setPlayers(playersRes.data);
       setMatches(matchesRes.data);
@@ -45,7 +45,7 @@ const DashBoard = () => {
 
     const timer = setInterval(() => {
       axios
-        .get("http://127.0.0.1:5000/api/live_matches")
+        .get("https://shangala.pythonanywhere.com/api/live_matches")
         .then((res) => setLiveMatches(res.data));
     }, 5000);
 
