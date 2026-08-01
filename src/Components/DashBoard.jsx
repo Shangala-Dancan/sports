@@ -159,8 +159,8 @@ const DashBoard = () => {
     return match.competition || "KVL";
   };
 
-const featured = news.length > 0 ? news[0] : null;
-const others = news.length > 1 ? news.slice(1, 7) : [];
+// const featured = news.length > 0 ? news[0] : null;
+// const others = news.length > 1 ? news.slice(1, 7) : [];
 
 
 const scrollContainerRef = useRef(null);
