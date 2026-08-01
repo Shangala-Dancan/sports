@@ -24,3 +24,18 @@
   cursor: pointer;
   background-color: rgb(36, 245, 217);
 }
+/* Add these rules to your existing Nav.css */
+
+.custom-navbar {
+  transition: box-shadow 0.2s ease, padding 0.2s ease;
+}
+
+.navbar-scrolled {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.navbar-nav .nav-link.active {
+  color: #fff !important;
+  text-decoration: underline;
+}
