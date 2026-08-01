@@ -41,7 +41,7 @@ const emptyStatLine = () => ({
 function RotationCourt({ label, rotation, playersById, isServing, liberoId }) {
   const order = [3, 2, 1, 4, 5, 0];
   return (
-    <div className="mb-2">
+    <div className="container-fluid mb-2">
       <div className="d-flex justify-content-between align-items-center mb-1">
         <strong>{label}</strong>
         {isServing && <span className="badge bg-warning text-dark">Serving</span>}

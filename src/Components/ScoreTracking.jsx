@@ -532,7 +532,7 @@ function LineupSetup({ homeTeam, awayTeam, homeRoster, awayRoster, onStart }) {
   );
 
   return (
-    <div className="card mb-3 border-primary">
+    <div className="container-fluid card mb-3 border-primary">
       <div className="card-header bg-primary text-white">Set Starting Lineup</div>
       <div className="card-body">
         <div className="row">

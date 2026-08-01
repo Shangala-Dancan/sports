@@ -150,7 +150,7 @@ const Standing = () => {
     const awayWon = isDecided && awaySets > homeSets;
 
     return (
-      <div key={match.id} className="border rounded p-2 mb-3" style={{ minWidth: "200px" }}>
+      <div key={match.id} className="container-fluid border rounded p-2 mb-3" style={{ minWidth: "200px" }}>
         <div className={`d-flex justify-content-between ${homeWon ? "fw-bold" : ""}`}>
           <span>{match.home_team}</span>
           <span>{match.status === "Scheduled" ? "-" : homeSets}</span>

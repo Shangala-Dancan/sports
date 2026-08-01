@@ -413,7 +413,7 @@ const Players = () => {
   }, [toast]);
 
   return (
-    <div className="container mt-4">
+    <div className="container-fluid mt-4">
       {loading && <div className="alert alert-info">{loading}</div>}
       {error && <div className="alert alert-danger">{error}</div>}
       {toast && (

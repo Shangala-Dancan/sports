@@ -65,7 +65,7 @@ const ClubDetails = () => {
   }
 
   return (
-    <div className="container mt-4">
+    <div className="container-fluid mt-4">
       <div className="card shadow">
         <div className="card-body">
           <div className="text-center mb-4">

@@ -110,7 +110,7 @@ const Statistics = () => {
   const rows = data?.rows || [];
 
   return (
-    <div className="container mt-4">
+    <div className="container-fluid  mt-4">
       <h3 className="mb-3">Statistics</h3>
 
       {/* Men's / Women's toggle */}

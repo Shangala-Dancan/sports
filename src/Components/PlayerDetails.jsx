@@ -201,7 +201,7 @@ Age: ${response.data?.age}
     }
 
     return (
-        <div className="card shadow p-4">
+        <div className="container-fluid card shadow p-4">
             <div className="d-flex justify-content-between align-items-center mb-3 no-print">
                 <button className="btn btn-sm btn-outline-secondary" onClick={() => navigate(-1)}>
                     ← Back

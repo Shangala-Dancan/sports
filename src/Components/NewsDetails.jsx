@@ -26,7 +26,7 @@ const NewsDetails = () => {
   if (!news) return <h3 className="text-center mt-5">Loading...</h3>;
 
   return (
-    <div className="container mt-4">
+    <div className="container-fluid mt-4">
       <img
         src={imgurl + news.image}
         alt={news.title}

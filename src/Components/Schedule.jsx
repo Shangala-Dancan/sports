@@ -595,68 +595,68 @@ const Schedule = () => {
       </div>
 
       <div className="row p-3">
-        <div className="col-6 ">
+        <div className="col-12 col-md-6 ">
           <h6>{matche.competition || "KVL"}{matche.stage && matche.stage !== "Group" ? ` - ${matche.stage}` : ""}</h6>
-          <div className="d-flex gap-3">
-            <div style={{ width: "300px" }} className="d-flex">
-              <img src={imgurl + matche.home_logo} alt="" style={{ width: "40px", height: "40px", borderRadius: "50%" }} />
-              <h4>{matche.home_team}</h4>
+          <div className="d-flex gap-2 flex-wrap align-items-center">
+            <div className="d-flex align-items-center flex-grow-1" style={{ minWidth: 0 }}>
+              <img src={imgurl + matche.home_logo} alt="" style={{ width: "40px", height: "40px", borderRadius: "50%", flexShrink: 0 }} />
+              <h4 className="fs-6 fs-md-4 mb-0 ms-2 text-truncate">{matche.home_team}</h4>
             </div>
 
             {(matche.status === "Live" || matche.status === "Completed") && (
-              <div className="d-flex">
-                <p className="ms-2 me-3 p-2">{matche.set1_home}</p>
+              <div className="d-flex flex-wrap">
+                <p className="ms-2 me-3 p-2 mb-0">{matche.set1_home}</p>
                 {isSetComplete(matche.set1_home, matche.set1_away, 1) && (
-                  <p className="me-3 p-2">{matche.set2_home}</p>
+                  <p className="me-3 p-2 mb-0">{matche.set2_home}</p>
                 )}
                 {isSetComplete(matche.set2_home, matche.set2_away, 2) && (
-                  <p className="me-3 p-2">{matche.set3_home}</p>
+                  <p className="me-3 p-2 mb-0">{matche.set3_home}</p>
                 )}
                 {isSetComplete(matche.set3_home, matche.set3_away, 3) && (
-                  <p className="me-3 p-2">{matche.set4_home}</p>
+                  <p className="me-3 p-2 mb-0">{matche.set4_home}</p>
                 )}
                 {isSetComplete(matche.set4_home, matche.set4_away, 4) && (
-                  <p className="me-3 p-2">{matche.set5_home}</p>
+                  <p className="me-3 p-2 mb-0">{matche.set5_home}</p>
                 )}
               </div>
             )}
           </div>
-          <div className="d-flex text-dark">
+          <div className="d-flex text-dark align-items-center flex-wrap gap-2">
             <hr className="flex-grow-1" />
-            <h4>{formatTime(matche.match_time)}</h4>
+            <h4 className="fs-6 fs-md-4 mb-0">{formatTime(matche.match_time)}</h4>
 
             {
               matche.status === "Live" &&
-              <button className="btn btn-warning" onClick={() => openScoreModal(matche)}>Update Score</button>
+              <button className="btn btn-warning btn-sm" onClick={() => openScoreModal(matche)}>Update Score</button>
             }
 
           </div>
-          <div className="d-flex gap-3">
-            <div style={{ width: "300px" }} className="d-flex">
-              <img src={imgurl + matche.away_logo} alt="" style={{ width: "40px", height: "40px", borderRadius: "50%" }} />
-              <h4>{matche.away_team}</h4>
+          <div className="d-flex gap-2 flex-wrap align-items-center">
+            <div className="d-flex align-items-center flex-grow-1" style={{ minWidth: 0 }}>
+              <img src={imgurl + matche.away_logo} alt="" style={{ width: "40px", height: "40px", borderRadius: "50%", flexShrink: 0 }} />
+              <h4 className="fs-6 fs-md-4 mb-0 ms-2 text-truncate">{matche.away_team}</h4>
             </div>
             {(matche.status === "Live" || matche.status === "Completed") && (
-              <div className="d-flex">
-                <p className="ms-2 me-3 p-2">{matche.set1_away}</p>
+              <div className="d-flex flex-wrap">
+                <p className="ms-2 me-3 p-2 mb-0">{matche.set1_away}</p>
                 {isSetComplete(matche.set1_home, matche.set1_away, 1) && (
-                  <p className="me-3 p-2">{matche.set2_away}</p>
+                  <p className="me-3 p-2 mb-0">{matche.set2_away}</p>
                 )}
                 {isSetComplete(matche.set2_home, matche.set2_away, 2) && (
-                  <p className="me-3 p-2">{matche.set3_away}</p>
+                  <p className="me-3 p-2 mb-0">{matche.set3_away}</p>
                 )}
                 {isSetComplete(matche.set3_home, matche.set3_away, 3) && (
-                  <p className="me-3 p-2">{matche.set4_away}</p>
+                  <p className="me-3 p-2 mb-0">{matche.set4_away}</p>
                 )}
                 {isSetComplete(matche.set4_home, matche.set4_away, 4) && (
-                  <p className="me-3 p-2">{matche.set5_away}</p>
+                  <p className="me-3 p-2 mb-0">{matche.set5_away}</p>
                 )}
               </div>
             )}
           </div>
 
         </div>
-        <div className="col-3" style={{ borderLeft: "1px solid black" }}>
+        <div className="col-12 col-md-3 mt-3 mt-md-0 pt-3 pt-md-0 schedule-side-col">
           <h6>Form</h6>
           <div className="d-flex p-2">
             <div>
@@ -707,6 +707,30 @@ const Schedule = () => {
   return (
 
     <div className="container-fluid mt-4">
+
+      <style>{`
+        .schedule-side-col {
+          border-top: 1px solid #444;
+        }
+        @media (min-width: 768px) {
+          .schedule-side-col {
+            border-top: none;
+            border-left: 1px solid #444;
+          }
+        }
+        @media (max-width: 767.98px) {
+          .bracket-column {
+            min-width: 170px !important;
+            padding-left: 0.75rem !important;
+            padding-right: 0.75rem !important;
+          }
+          .nav-tabs .nav-link,
+          .nav-pills .nav-link {
+            padding: 0.4rem 0.6rem;
+            font-size: 0.9rem;
+          }
+        }
+      `}</style>
 
       <p>{loading}</p>
       <div className="row bg-white justify-content-center mt-3">
@@ -796,7 +820,7 @@ const Schedule = () => {
                           Set {n}{n === selectedMatch.currentSet ? " (current)" : ""}
                         </small>
                       </div>
-                      <div className="col">
+                      <div className="col-12 col-sm">
                         <label>{selectedMatch.home_team}</label>
                         <input
                           type="number"
@@ -808,7 +832,7 @@ const Schedule = () => {
                         />
                       </div>
 
-                      <div className="col">
+                      <div className="col-12 col-sm">
                         <label>{selectedMatch.away_team}</label>
                         <input
                           type="number"
@@ -837,8 +861,8 @@ const Schedule = () => {
       </div>
 
       {user?.role === "admin" && (
-        <button className="btn btn-primary rounded-circle position-fixed"
-          style={{ right: "30px", bottom: "30px", width: "60px", height: "60px", fontSize: "30px" }} onClick={() => setShowForm(true)}
+        <button className="btn btn-primary rounded-circle position-fixed d-flex align-items-center justify-content-center"
+          style={{ right: "16px", bottom: "16px", width: "52px", height: "52px", fontSize: "26px", zIndex: 1050 }} onClick={() => setShowForm(true)}
         >
           +</button>)}
 
