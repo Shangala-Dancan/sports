@@ -1,0 +1,26 @@
+.custom-navbar{
+  background: linear-gradient(90deg,#0d6efd,#6610f2,#dc3545, #fd7e14,#dc3545,#6610f2,#0d6efd);
+}
+.load{
+  background: #f92323,#eb781a,#eb781a,#f92323;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.fab{
+  width: 60px;
+  height: 60px;
+  color: white;
+  bottom: 30px;
+  right: 30px;
+  position: fixed;
+  font-size: 32px;
+  z-index: 1000;
+  border: none;
+  background-color: #0d6efd;
+}
+.fab:hover{
+  cursor: pointer;
+  background-color: rgb(36, 245, 217);
+}
