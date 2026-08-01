@@ -12,7 +12,7 @@ const Players = () => {
   const navigate = useNavigate();
   const [players, setPlayers] = useState([]);
   const [clubs, setClubs] = useState([]);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user")||"null");
   const [loading, setLoading] = useState("");
   const [error, setError] = useState("");
 
@@ -326,13 +326,20 @@ const Players = () => {
     pollTimers.current[clubIdKey] = { interval, timeout };
   };
 
-  useEffect(() => {
-    return () => {
-      // cleanup any running pollers on unmount
-      Object.keys(pollTimers.current).forEach((key) => clearPollTimers(key));
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+ useEffect(() => {
+  const timers = pollTimers.current;
+
+  return () => {
+    Object.keys(timers).forEach((key) => {
+      const t = timers[key];
+
+      if (t) {
+        clearInterval(t.interval);
+        clearTimeout(t.timeout);
+      }
+    });
+  };
+}, []);
 
   // Admin approves a pending player: only allowed once this player's fee has
   // been paid (checked via the club's current pending batch coverage).

@@ -7,9 +7,9 @@ const DashBoard = () => {
   const navigate = useNavigate();
   const scrollRef = useRef(null); // Ref for the date header container
   const [clubs, setClubs] = useState([]);
-  const [players, setPlayers] = useState([]);
+  const [, setPlayers] = useState([]);
   const [matches, setMatches] = useState([]);
-  const [liveMatches, setLiveMatches] = useState([]);
+  const [, setLiveMatches] = useState([]);
   const [news, setNews] = useState([]);
 
   const imgurl = "https://shangala.pythonanywhere.com/static/images/";

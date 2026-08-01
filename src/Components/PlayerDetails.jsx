@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { QRCodeCanvas } from 'qrcode.react';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState,useCallback } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 
 const STAT_FIELDS = [
@@ -101,48 +101,64 @@ const PlayerDetails = () => {
 
     const imgurl = "https://shangala.pythonanywhere.com/static/images/";
 
-    const getPlayer = async () => {
-        setLoading(true);
-        setError("");
-        try {
-            const response = await axios.get(`https://shangala.pythonanywhere.com/api/get_players/${id}`)
+    const getPlayer = useCallback(async () => {
+    setLoading(true);
+    setError("");
 
-            setPlayer(response.data);
-            const formattedData = `
+    try {
+        const response = await axios.get(
+            `https://shangala.pythonanywhere.com/api/get_players/${id}`
+        );
+
+        setPlayer(response.data);
+
+        const formattedData = `
 Name: ${response.data?.name}
 Team: ${response.data?.club_name}
 Position: ${response.data?.position}
 Nationality: ${response.data?.nationality || "N/A"}
 Age: ${response.data?.age}
-            `.trim();
-            setQrData(formattedData)
-        } catch (err) {
-            console.error("Error fetching player:", err);
-            setError("Couldn't load this player's profile. Check your connection and try again.");
-        } finally {
-            setLoading(false);
-        }
-    }
+        `.trim();
 
-    const getSeasonStats = async () => {
-        setStatsLoading(true);
-        setStatsError("");
-        try {
-            const response = await axios.get(`https://shangala.pythonanywhere.com/api/get_season_stats`);
-            const row = (response.data || []).find((r) => String(r.player_id) === String(id));
-            setSeasonStats(row || null);
-        } catch (err) {
-            console.error("Error fetching season stats:", err);
-            setStatsError("Couldn't load season stats.");
-        } finally {
-            setStatsLoading(false);
-        }
+        setQrData(formattedData);
+
+    } catch (err) {
+        console.error("Error fetching player:", err);
+        setError("Couldn't load this player's profile. Check your connection and try again.");
+
+    } finally {
+        setLoading(false);
     }
+}, [id]);
+
+   const getSeasonStats = useCallback(async () => {
+    setStatsLoading(true);
+    setStatsError("");
+
+    try {
+        const response = await axios.get(
+            `https://shangala.pythonanywhere.com/api/get_season_stats`
+        );
+
+        const row = (response.data || []).find(
+            (r) => String(r.player_id) === String(id)
+        );
+
+        setSeasonStats(row || null);
+
+    } catch (err) {
+        console.error("Error fetching season stats:", err);
+        setStatsError("Couldn't load season stats.");
+
+    } finally {
+        setStatsLoading(false);
+    }
+}, [id]);
 
     useEffect(() => {
         getPlayer()
         getSeasonStats()
-    }, [id,getPlayer, getSeasonStats])
+    }, [getPlayer, getSeasonStats])
 
     const downloadQrCode = () => {
         const canvas = qrRef.current?.querySelector("canvas");

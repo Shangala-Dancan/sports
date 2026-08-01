@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useCallback  } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
@@ -12,39 +12,39 @@ const ClubDetails = () => {
   const imgurl = "https://shangala.pythonanywhere.com/static/images/";
 
   // Get club details
-  const getClub = async () => {
-    try {
-      setLoading("Loading club details...");
+  const getClub = useCallback(async () => {
+  try {
+    setLoading("Loading club details...");
 
-      const response = await axios.get(
-        `https://shangala.pythonanywhere.com/api/get_club/${id}`
-      );
+    const response = await axios.get(
+      `https://shangala.pythonanywhere.com/api/get_club/${id}`
+    );
 
-      setClub(response.data);
-      setLoading("");
-    } catch (error) {
-      console.log(error);
-      setLoading("");
-    }
-  };
+    setClub(response.data);
+    setLoading("");
+  } catch (error) {
+    console.log(error);
+    setLoading("");
+  }
+}, [id]);
 
   // Get club players
-  const getPlayers = async () => {
-    try {
-      const response = await axios.get(
-        `https://shangala.pythonanywhere.com/api/club_players/${id}`
-      );
+  const getPlayers = useCallback(async () => {
+  try {
+    const response = await axios.get(
+      `https://shangala.pythonanywhere.com/api/club_players/${id}`
+    );
 
-      setPlayers(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    setPlayers(response.data);
+  } catch (error) {
+    console.log(error);
+  }
+}, [id]);
 
   useEffect(() => {
     getClub();
     getPlayers();
-  }, [id]);
+  }, [getClub, getPlayers]);
 
   if (loading) {
     return (
