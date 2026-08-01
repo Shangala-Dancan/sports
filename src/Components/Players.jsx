@@ -39,7 +39,6 @@ const Players = () => {
   const [rejectingId, setRejectingId] = useState(null);
   const [rejectReason, setRejectReason] = useState("");
 
-  const user1=JSON.parse(localStorage.getItem("user"))
 
   
   const [clubPayments, setClubPayments] = useState({});

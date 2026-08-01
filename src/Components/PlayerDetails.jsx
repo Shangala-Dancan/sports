@@ -142,7 +142,7 @@ Age: ${response.data?.age}
     useEffect(() => {
         getPlayer()
         getSeasonStats()
-    }, [id])
+    }, [id,getPlayer, getSeasonStats])
 
     const downloadQrCode = () => {
         const canvas = qrRef.current?.querySelector("canvas");

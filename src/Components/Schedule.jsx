@@ -11,7 +11,7 @@ const COMPETITIONS = ["KVL", "Kenya Cup"];
 const GENDERS = ["Men", "Women"];
 
 // check if a user is login
-const user = JSON.parse(localStorage.getItem("user"));
+const user = JSON.parse(localStorage.getItem("user")||"null");
 
 // order in which knockout stages should appear after the group stage
 const KNOCKOUT_STAGES = ["Quarterfinal", "Semifinal", "Final"];
@@ -603,7 +603,7 @@ const Schedule = () => {
               <h4>{matche.home_team}</h4>
             </div>
 
-            {(matche.status == "Live" || matche.status == "Completed") && (
+            {(matche.status === "Live" || matche.status === "Completed") && (
               <div className="d-flex">
                 <p className="ms-2 me-3 p-2">{matche.set1_home}</p>
                 {isSetComplete(matche.set1_home, matche.set1_away, 1) && (
@@ -636,7 +636,7 @@ const Schedule = () => {
               <img src={imgurl + matche.away_logo} alt="" style={{ width: "40px", height: "40px", borderRadius: "50%" }} />
               <h4>{matche.away_team}</h4>
             </div>
-            {(matche.status == "Live" || matche.status == "Completed") && (
+            {(matche.status === "Live" || matche.status === "Completed") && (
               <div className="d-flex">
                 <p className="ms-2 me-3 p-2">{matche.set1_away}</p>
                 {isSetComplete(matche.set1_home, matche.set1_away, 1) && (
