@@ -57,13 +57,13 @@ const BracketMatchCard = ({ match, imgurl, formatTime, calculateSets, withConnec
         <small className="text-white-50">{formatTime(match.match_time)}</small>
       </div>
 
-      {match.status === "Scheduled" && (
+      {match.status === "Scheduled" && user?.role === "admin" && (
         <div className="text-center mt-2">
           <button className="btn btn-success btn-sm" onClick={() => startMatch(match.id)}>Start Match</button>
         </div>
       )}
 
-      {match.status === "Live" && (
+      {match.status === "Live" && user?.role === "admin" && (
         <div className="text-center mt-2">
           <button className="btn btn-warning btn-sm" onClick={() => openScoreModal(match)}>Update Score</button>
         </div>
@@ -598,17 +598,16 @@ const Schedule = () => {
         <p className="">{new Date(matche.match_date).toLocaleDateString()}</p>
       </div>
 
-      <div className="row p-3">
-        <div className="col-12">
+      <div
+        className="d-flex flex-nowrap p-3"
+        style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}
+      >
+        <div className="pe-3" style={{ minWidth: "280px", flex: "0 0 auto" }}>
           <h6>{matche.competition || "KVL"}{matche.stage && matche.stage !== "Group" ? ` - ${matche.stage}` : ""}</h6>
 
-          {/* HOME ROW: logo + name + set scores + form badges, all on one line.
-              Row scrolls horizontally instead of squeezing/truncating content. */}
-          <div
-            className="d-flex gap-2 flex-nowrap align-items-center pb-1"
-            style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}
-          >
-            <div className="d-flex align-items-center flex-shrink-0">
+          {/* HOME ROW: logo + name + set scores, all on one line, full name shown */}
+          <div className="d-flex gap-2 flex-nowrap align-items-center">
+            <div className="d-flex align-items-center">
               <img src={imgurl + matche.home_logo} alt="" style={{ width: "40px", height: "40px", borderRadius: "50%", flexShrink: 0 }} />
               <h4 className="fs-6 fs-md-4 mb-0 ms-2" style={{ whiteSpace: "nowrap" }}>{matche.home_team}</h4>
             </div>
@@ -630,18 +629,6 @@ const Schedule = () => {
                 )}
               </div>
             )}
-
-            {matche.home_team_form?.length > 0 && (
-              <div className="d-flex flex-nowrap flex-shrink-0 ms-2">
-                {matche.home_team_form.map((result, index) => (
-                  <span key={index} style={{
-                    display: "inline-block", width: "18px", height: "18px", lineHeight: "18px",
-                    textAlign: "center", borderRadius: "4px", marginRight: "3px", backgroundColor: result === "W" ? "green" : "red",
-                    color: "white", fontSize: "12px", fontWeight: "bold", flexShrink: 0
-                  }}>{result === "W" ? "W" : "X"}</span>
-                ))}
-              </div>
-            )}
           </div>
 
           <div className="d-flex text-dark align-items-center flex-wrap gap-2">
@@ -649,23 +636,15 @@ const Schedule = () => {
             <h4 className="fs-6 fs-md-4 mb-0">{formatTime(matche.match_time)}</h4>
 
             {
-              matche.status === "Live" &&
+              matche.status === "Live" && user?.role === "admin" &&
               <button className="btn btn-warning btn-sm" onClick={() => openScoreModal(matche)}>Update Score</button>
-            }
-            {
-              matche.status === "Scheduled" &&
-              <button className="btn btn-success btn-sm" onClick={() => startMatch(matche.id)}>Start Match</button>
             }
 
           </div>
 
-          {/* AWAY ROW: logo + name + set scores + form badges, all on one line.
-              Row scrolls horizontally instead of squeezing/truncating content. */}
-          <div
-            className="d-flex gap-2 flex-nowrap align-items-center pb-1"
-            style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}
-          >
-            <div className="d-flex align-items-center flex-shrink-0">
+          {/* AWAY ROW: logo + name + set scores, all on one line, full name shown */}
+          <div className="d-flex gap-2 flex-nowrap align-items-center">
+            <div className="d-flex align-items-center">
               <img src={imgurl + matche.away_logo} alt="" style={{ width: "40px", height: "40px", borderRadius: "50%", flexShrink: 0 }} />
               <h4 className="fs-6 fs-md-4 mb-0 ms-2" style={{ whiteSpace: "nowrap" }}>{matche.away_team}</h4>
             </div>
@@ -686,22 +665,46 @@ const Schedule = () => {
                 )}
               </div>
             )}
-
-            {matche.away_team_form?.length > 0 && (
-              <div className="d-flex flex-nowrap flex-shrink-0 ms-2">
-                {matche.away_team_form.map((result, index) => (
-                  <span key={index} style={{
-                    display: "inline-block", width: "18px", height: "18px", lineHeight: "18px",
-                    textAlign: "center", borderRadius: "4px", marginRight: "3px", backgroundColor: result === "W" ? "green" : "red",
-                    color: "white", fontSize: "12px", fontWeight: "bold", flexShrink: 0
-                  }}>{result === "W" ? "W" : "X"}</span>
-                ))}
-              </div>
-            )}
           </div>
 
         </div>
+        <div className="schedule-side-col ps-3" style={{ minWidth: "160px", flex: "0 0 auto" }}>
+          <h6>Form</h6>
+          <div className="d-flex p-2">
+            <div>
+              {matche.home_team_form?.map((result, index) => (
+                <span key={index} style={{
+                  display: "inline-block", width: "18px", height: "18px", lineHeight: "18px",
+                  textAlign: "center", borderRadius: "4px", marginRight: "5px", backgroundColor: result === "W" ? "green" : "red",
+                  color: "white", fontSize: "12px", fontWeight: "bold"
+                }}>{result === "W" ? "W" : "X"}</span>
+
+              ))}
+
+            </div>
+          </div>
+          <div className="d-flex">
+            <hr className="text-dark flex-grow-1" />
+            {
+              matche.status === "Scheduled" && user?.role === "admin" &&
+              <button className="btn btn-success" onClick={() => startMatch(matche.id)}>Start Match</button>}
+          </div>
+
+          <div className="d-flex p-2">
+
+            <div>
+              {matche.away_team_form?.map((result, index) => (
+                <span key={index} style={{
+                  display: "inline-block", width: "18px", height: "18px", lineHeight: "18px",
+                  textAlign: "center", borderRadius: "4px", marginRight: "5px", backgroundColor: result === "W" ? "green" : "red",
+                  color: "white", fontSize: "12px", fontWeight: "bold"
+                }}>{result === "W" ? "W" : "X"}</span>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
+
 
       {/* Once a match is Completed, show how many sets each team won overall */}
       {matche.status === "Completed" && (
@@ -720,13 +723,7 @@ const Schedule = () => {
 
       <style>{`
         .schedule-side-col {
-          border-top: 1px solid #444;
-        }
-        @media (min-width: 768px) {
-          .schedule-side-col {
-            border-top: none;
-            border-left: 1px solid #444;
-          }
+          border-left: 1px solid #444;
         }
         @media (max-width: 767.98px) {
           .bracket-column {
