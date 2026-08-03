@@ -35,23 +35,23 @@ const BracketMatchCard = ({ match, imgurl, formatTime, calculateSets, withConnec
     <div
       className={`bracket-match position-relative bg-secondary text-white rounded p-2 my-2 ${withConnector ? "bracket-has-connector" : ""}`}
     >
-      <div className="d-flex align-items-center gap-2 mb-1">
+      <div className="d-flex align-items-center gap-2 mb-1 flex-nowrap">
         <img
           src={imgurl + match.home_logo}
           alt=""
-          style={{ width: "22px", height: "22px", borderRadius: "50%" }}
+          style={{ width: "22px", height: "22px", borderRadius: "50%", flexShrink: 0 }}
         />
-        <small className="flex-grow-1 text-truncate">{match.home_team}</small>
-        {isScored && <strong>{calculateSets(match, "home")}</strong>}
+        <small className="flex-grow-1 flex-shrink-1 text-truncate" style={{ minWidth: 0 }}>{match.home_team}</small>
+        {isScored && <strong className="flex-shrink-0">{calculateSets(match, "home")}</strong>}
       </div>
-      <div className="d-flex align-items-center gap-2">
+      <div className="d-flex align-items-center gap-2 flex-nowrap">
         <img
           src={imgurl + match.away_logo}
           alt=""
-          style={{ width: "22px", height: "22px", borderRadius: "50%" }}
+          style={{ width: "22px", height: "22px", borderRadius: "50%", flexShrink: 0 }}
         />
-        <small className="flex-grow-1 text-truncate">{match.away_team}</small>
-        {isScored && <strong>{calculateSets(match, "away")}</strong>}
+        <small className="flex-grow-1 flex-shrink-1 text-truncate" style={{ minWidth: 0 }}>{match.away_team}</small>
+        {isScored && <strong className="flex-shrink-0">{calculateSets(match, "away")}</strong>}
       </div>
       <div className="text-center">
         <small className="text-white-50">{formatTime(match.match_time)}</small>
@@ -586,6 +586,10 @@ const Schedule = () => {
 
   // Extracted so it can be reused for both the flat KVL list and the
   // grouped/staged Kenya Cup sections.
+  //
+  // Team name + set scores now live in a single flex-nowrap row: the name
+  // block shrinks/truncates (text-truncate + minWidth: 0) instead of
+  // wrapping, so the score badges never get pushed onto their own line.
   const renderMatchCard = (matche) => (
 
     <div className="col-md-9 mb-3 mt-3" key={matche.id}>
@@ -595,32 +599,51 @@ const Schedule = () => {
       </div>
 
       <div className="row p-3">
-        <div className="col-12 col-md-6 ">
+        <div className="col-12">
           <h6>{matche.competition || "KVL"}{matche.stage && matche.stage !== "Group" ? ` - ${matche.stage}` : ""}</h6>
-          <div className="d-flex gap-2 flex-wrap align-items-center">
-            <div className="d-flex align-items-center flex-grow-1" style={{ minWidth: 0 }}>
+
+          {/* HOME ROW: logo + name + set scores + form badges, all on one line.
+              Row scrolls horizontally instead of squeezing/truncating content. */}
+          <div
+            className="d-flex gap-2 flex-nowrap align-items-center pb-1"
+            style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}
+          >
+            <div className="d-flex align-items-center flex-shrink-0">
               <img src={imgurl + matche.home_logo} alt="" style={{ width: "40px", height: "40px", borderRadius: "50%", flexShrink: 0 }} />
-              <h4 className="fs-6 fs-md-4 mb-0 ms-2 text-truncate">{matche.home_team}</h4>
+              <h4 className="fs-6 fs-md-4 mb-0 ms-2" style={{ whiteSpace: "nowrap" }}>{matche.home_team}</h4>
             </div>
 
             {(matche.status === "Live" || matche.status === "Completed") && (
-              <div className="d-flex flex-wrap">
-                <p className="ms-2 me-3 p-2 mb-0">{matche.set1_home}</p>
+              <div className="d-flex flex-nowrap flex-shrink-0">
+                <p className="ms-2 mb-0 fw-bold" style={{ minWidth: "1.2em", textAlign: "center" }}>{matche.set1_home}</p>
                 {isSetComplete(matche.set1_home, matche.set1_away, 1) && (
-                  <p className="me-3 p-2 mb-0">{matche.set2_home}</p>
+                  <p className="ms-2 mb-0 fw-bold" style={{ minWidth: "1.2em", textAlign: "center" }}>{matche.set2_home}</p>
                 )}
                 {isSetComplete(matche.set2_home, matche.set2_away, 2) && (
-                  <p className="me-3 p-2 mb-0">{matche.set3_home}</p>
+                  <p className="ms-2 mb-0 fw-bold" style={{ minWidth: "1.2em", textAlign: "center" }}>{matche.set3_home}</p>
                 )}
                 {isSetComplete(matche.set3_home, matche.set3_away, 3) && (
-                  <p className="me-3 p-2 mb-0">{matche.set4_home}</p>
+                  <p className="ms-2 mb-0 fw-bold" style={{ minWidth: "1.2em", textAlign: "center" }}>{matche.set4_home}</p>
                 )}
                 {isSetComplete(matche.set4_home, matche.set4_away, 4) && (
-                  <p className="me-3 p-2 mb-0">{matche.set5_home}</p>
+                  <p className="ms-2 mb-0 fw-bold" style={{ minWidth: "1.2em", textAlign: "center" }}>{matche.set5_home}</p>
                 )}
               </div>
             )}
+
+            {matche.home_team_form?.length > 0 && (
+              <div className="d-flex flex-nowrap flex-shrink-0 ms-2">
+                {matche.home_team_form.map((result, index) => (
+                  <span key={index} style={{
+                    display: "inline-block", width: "18px", height: "18px", lineHeight: "18px",
+                    textAlign: "center", borderRadius: "4px", marginRight: "3px", backgroundColor: result === "W" ? "green" : "red",
+                    color: "white", fontSize: "12px", fontWeight: "bold", flexShrink: 0
+                  }}>{result === "W" ? "W" : "X"}</span>
+                ))}
+              </div>
+            )}
           </div>
+
           <div className="d-flex text-dark align-items-center flex-wrap gap-2">
             <hr className="flex-grow-1" />
             <h4 className="fs-6 fs-md-4 mb-0">{formatTime(matche.match_time)}</h4>
@@ -629,67 +652,54 @@ const Schedule = () => {
               matche.status === "Live" &&
               <button className="btn btn-warning btn-sm" onClick={() => openScoreModal(matche)}>Update Score</button>
             }
+            {
+              matche.status === "Scheduled" &&
+              <button className="btn btn-success btn-sm" onClick={() => startMatch(matche.id)}>Start Match</button>
+            }
 
           </div>
-          <div className="d-flex gap-2 flex-wrap align-items-center">
-            <div className="d-flex align-items-center flex-grow-1" style={{ minWidth: 0 }}>
+
+          {/* AWAY ROW: logo + name + set scores + form badges, all on one line.
+              Row scrolls horizontally instead of squeezing/truncating content. */}
+          <div
+            className="d-flex gap-2 flex-nowrap align-items-center pb-1"
+            style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}
+          >
+            <div className="d-flex align-items-center flex-shrink-0">
               <img src={imgurl + matche.away_logo} alt="" style={{ width: "40px", height: "40px", borderRadius: "50%", flexShrink: 0 }} />
-              <h4 className="fs-6 fs-md-4 mb-0 ms-2 text-truncate">{matche.away_team}</h4>
+              <h4 className="fs-6 fs-md-4 mb-0 ms-2" style={{ whiteSpace: "nowrap" }}>{matche.away_team}</h4>
             </div>
             {(matche.status === "Live" || matche.status === "Completed") && (
-              <div className="d-flex flex-wrap">
-                <p className="ms-2 me-3 p-2 mb-0">{matche.set1_away}</p>
+              <div className="d-flex flex-nowrap flex-shrink-0">
+                <p className="ms-2 mb-0 fw-bold" style={{ minWidth: "1.2em", textAlign: "center" }}>{matche.set1_away}</p>
                 {isSetComplete(matche.set1_home, matche.set1_away, 1) && (
-                  <p className="me-3 p-2 mb-0">{matche.set2_away}</p>
+                  <p className="ms-2 mb-0 fw-bold" style={{ minWidth: "1.2em", textAlign: "center" }}>{matche.set2_away}</p>
                 )}
                 {isSetComplete(matche.set2_home, matche.set2_away, 2) && (
-                  <p className="me-3 p-2 mb-0">{matche.set3_away}</p>
+                  <p className="ms-2 mb-0 fw-bold" style={{ minWidth: "1.2em", textAlign: "center" }}>{matche.set3_away}</p>
                 )}
                 {isSetComplete(matche.set3_home, matche.set3_away, 3) && (
-                  <p className="me-3 p-2 mb-0">{matche.set4_away}</p>
+                  <p className="ms-2 mb-0 fw-bold" style={{ minWidth: "1.2em", textAlign: "center" }}>{matche.set4_away}</p>
                 )}
                 {isSetComplete(matche.set4_home, matche.set4_away, 4) && (
-                  <p className="me-3 p-2 mb-0">{matche.set5_away}</p>
+                  <p className="ms-2 mb-0 fw-bold" style={{ minWidth: "1.2em", textAlign: "center" }}>{matche.set5_away}</p>
                 )}
+              </div>
+            )}
+
+            {matche.away_team_form?.length > 0 && (
+              <div className="d-flex flex-nowrap flex-shrink-0 ms-2">
+                {matche.away_team_form.map((result, index) => (
+                  <span key={index} style={{
+                    display: "inline-block", width: "18px", height: "18px", lineHeight: "18px",
+                    textAlign: "center", borderRadius: "4px", marginRight: "3px", backgroundColor: result === "W" ? "green" : "red",
+                    color: "white", fontSize: "12px", fontWeight: "bold", flexShrink: 0
+                  }}>{result === "W" ? "W" : "X"}</span>
+                ))}
               </div>
             )}
           </div>
 
-        </div>
-        <div className="col-12 col-md-3 mt-3 mt-md-0 pt-3 pt-md-0 schedule-side-col">
-          <h6>Form</h6>
-          <div className="d-flex p-2">
-            <div>
-              {matche.home_team_form?.map((result, index) => (
-                <span key={index} style={{
-                  display: "inline-block", width: "18px", height: "18px", lineHeight: "18px",
-                  textAlign: "center", borderRadius: "4px", marginRight: "5px", backgroundColor: result === "W" ? "green" : "red",
-                  color: "white", fontSize: "12px", fontWeight: "bold"
-                }}>{result === "W" ? "W" : "X"}</span>
-
-              ))}
-
-            </div>
-          </div>
-          <div className="d-flex">
-            <hr className="text-dark flex-grow-1" />
-            {
-              matche.status === "Scheduled" &&
-              <button className="btn btn-success" onClick={() => startMatch(matche.id)}>Start Match</button>}
-          </div>
-
-          <div className="d-flex p-2">
-
-            <div>
-              {matche.away_team_form?.map((result, index) => (
-                <span key={index} style={{
-                  display: "inline-block", width: "18px", height: "18px", lineHeight: "18px",
-                  textAlign: "center", borderRadius: "4px", marginRight: "5px", backgroundColor: result === "W" ? "green" : "red",
-                  color: "white", fontSize: "12px", fontWeight: "bold"
-                }}>{result === "W" ? "W" : "X"}</span>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
 

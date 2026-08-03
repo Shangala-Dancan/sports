@@ -14,6 +14,16 @@ const DashBoard = () => {
 
   const imgurl = "https://shangala.pythonanywhere.com/static/images/";
 
+  // Plain grey placeholder shown instead of the browser's default
+  // "broken image" icon whenever a logo/photo URL 404s or fails to load.
+  const FALLBACK_IMG =
+    "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect width='100' height='100' fill='%23e9ecef'/%3E%3C/svg%3E";
+
+  const handleImgError = (e) => {
+    e.currentTarget.onerror = null; // stop retry-looping if the fallback itself is ever swapped
+    e.currentTarget.src = FALLBACK_IMG;
+  };
+
    // ✅ FETCH NEWS
   const fetchNews = async () => {
     try {
@@ -185,6 +195,68 @@ const scrollContainerRef = useRef(null);
 
   return (
     <div className="container-fluid m-3">
+
+      {/* Responsive + colour tweaks that live alongside Dash.css */}
+      <style>{`
+        .hero-banner-img { height: 600px; }
+        .hero-title { font-size: clamp(1.9rem, 5vw, 4.5rem); }
+        .hero-subtitle { font-size: clamp(0.95rem, 2vw, 1.5rem); }
+        .hero-content { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .date-scroll-btn { width: 50px; height: 50px; }
+        .match-scroll-row { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .match-team-block { min-width: 200px; }
+        .live-dot {
+          display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+          background: #e30613; margin-right: 6px; animation: pulse-dot 1.4s infinite;
+        }
+        @keyframes pulse-dot {
+          0% { box-shadow: 0 0 0 0 rgba(227,6,19,0.6); }
+          70% { box-shadow: 0 0 0 6px rgba(227,6,19,0); }
+          100% { box-shadow: 0 0 0 0 rgba(227,6,19,0); }
+        }
+        .match-card {
+          border-radius: 12px;
+          background: linear-gradient(135deg, rgba(255,193,7,0.06), rgba(0,0,0,0.02));
+          transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .match-card:hover {
+          box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+          transform: translateY(-2px);
+        }
+        .section-heading {
+          position: relative;
+          padding-bottom: 8px;
+          margin-bottom: 1rem;
+        }
+        .section-heading::after {
+          content: "";
+          position: absolute;
+          left: 0; bottom: 0;
+          width: 56px; height: 4px;
+          border-radius: 2px;
+          background: linear-gradient(90deg, #ffc107, #e30613);
+        }
+        .team-card {
+          border-radius: 12px;
+          padding: 12px 6px;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .team-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 20px rgba(0,0,0,0.10);
+        }
+        .team-card img { border: 3px solid #ffc107; }
+
+        @media (max-width: 767.98px) {
+          .hero-banner-img { height: 320px; }
+          .hero-content { padding-left: 1rem; padding-right: 1rem; }
+          .hero-content .btn { padding: 0.5rem 1rem; font-size: 0.95rem; }
+          .date-scroll-btn { width: 36px; height: 36px; font-size: 0.9rem; }
+          .match-team-block { min-width: 150px; }
+          .match-card h4 { font-size: 1.05rem; }
+        }
+      `}</style>
+
       {/* Stats Cards */}
       <div className="row mt-4 g-3">
         {/* Example: Teams Card */}
@@ -195,10 +267,10 @@ const scrollContainerRef = useRef(null);
   <img
     src="images/log2.jpg"
     alt=""
+    className="img-fluid d-block hero-banner-img"
     style={{
-      height: "600px",
-      width: "100%",
-      objectFit: "cover",
+      width:"100%",
+      objectFit: "cover"
     }}
   />
 
@@ -215,11 +287,11 @@ const scrollContainerRef = useRef(null);
 
   {/* Content */}
   <div
-    className="position-absolute top-50 start-0 translate-middle-y text-white px-5"style={{ zIndex: 2 }}>
-    <h1 className="display-2 text-shadow fw-bold">KVL 2026</h1>
-  <p className="fs-4 text-light opacity-75">Kenya's Premier Volleyball League</p>
+    className="position-absolute top-50 start-0 translate-middle-y text-white hero-content"style={{ zIndex: 2 }}>
+    <h1 className="hero-title fw-bold mb-2">KVL 2026</h1>
+  <p className="hero-subtitle text-light opacity-75 mb-3">Kenya's Premier Volleyball League</p>
 
-  <button className="btn btn-warning btn-lg mt-3" onClick={()=>navigate("/schedule")}>View Fixtures</button>
+  <button className="btn btn-warning fw-semibold" onClick={()=>navigate("/schedule")}>View Fixtures</button>
    
   </div>
 </div>
@@ -230,7 +302,7 @@ const scrollContainerRef = useRef(null);
       <div className="container-fluid">
         {/* Header & "Go to Latest" Button */}
         <div className="d-flex justify-content-between align-items-center mt-4 mb-2">
-          <h2>Full Schedule</h2>
+          <h2 className="section-heading">Full Schedule</h2>
         </div>
         
         
@@ -238,11 +310,11 @@ const scrollContainerRef = useRef(null);
         <div className="row justify-content-center">
          
 
-        <div className="col-md-8 d-flex">
-           <button className=" me-2 bg-warning border-0" onClick={handleScrollLeft} style={{borderRadius:"50%",width:"50px",height:"50px",alignItems:"center",justifyContent:"center",display:"flex",marginTop:"30px"}}>
+        <div className="col-12 col-md-8 d-flex">
+           <button className="date-scroll-btn me-2 bg-warning border-0 flex-shrink-0" onClick={handleScrollLeft} style={{borderRadius:"50%",alignItems:"center",justifyContent:"center",display:"flex",marginTop:"30px"}}>
             &lt;
           </button>
-        <div className="d-flex  custom-scrollbar" style={{overflowX: "auto",scrollBehavior: "smooth", maxWidth: "640px", }} ref={scrollRef}>
+        <div className="d-flex  custom-scrollbar" style={{overflowX: "auto",scrollBehavior: "smooth", maxWidth: "100%", flex: "1 1 auto" }} ref={scrollRef}>
           {dateRange.map((date) => {
             const dateStr = date.toLocaleDateString("en-us", {
               year: "numeric",
@@ -274,7 +346,7 @@ const scrollContainerRef = useRef(null);
             );
           })}
           </div>
-          <button className=" me-2 bg-warning border-0"style={{borderRadius:"50%",width:"50px",height:"50px",alignItems:"center",justifyContent:"center",display:"flex",marginTop:"30px"}} onClick={handleScrollRight}>
+          <button className="date-scroll-btn me-2 bg-warning border-0 flex-shrink-0"style={{borderRadius:"50%",alignItems:"center",justifyContent:"center",display:"flex",marginTop:"30px"}} onClick={handleScrollRight}>
             &gt;
           </button>
           </div>
@@ -287,49 +359,50 @@ const scrollContainerRef = useRef(null);
           matchesForSelectedDay.map(({ match }) => (
             <div
               key={match.id}
-              className="card mb-3 p-2 bg-transparent border-0 "
+              className="card match-card mb-3 p-2 border-0 "
               style={{ minWidth: "150px" }}
             >
               <div className="row" style={{background:"transparent"}}>
                 <hr />
-                <div className="col-md-5 ">
+                <div className="col-12 col-md-5 match-scroll-row">
                   <div className="d-flex justify-content-between align-items-center mb-1">
                     <span className={`badge bg-${competitionBadgeColor(match.competition)}`}>
+                      {match.status === "Live" && <span className="live-dot"></span>}
                       {competitionBadgeLabel(match)}
                     </span>
                   </div>
-                  <div className="d-flex">
+                  <div className="d-flex flex-nowrap">
                     {/* home team */}
-                    <div className="d-flex gap-1" style={{minWidth:"200px"}}>                    
-                      <img src={imgurl+match.home_logo} alt="" style={{width:"40px",height:"40px",borderRadius:"50%"}}/>
+                    <div className="d-flex gap-1 match-team-block">                    
+                      <img src={imgurl+match.home_logo} alt="" onError={handleImgError} style={{width:"40px",height:"40px",borderRadius:"50%",flexShrink:0}}/>
                     <h4 className="p-2">{match.home_team}</h4>
                     </div>
 
                     {/* set score */}
                     {match.status==="Live"&&(
-                    <div className="d-flex mx-3">
-                      <p className="ms-2 me-3 p-2">{match.set1_home}</p>
+                    <div className="d-flex mx-3 flex-shrink-0">
+                      <p className="ms-2 me-3 p-2 fw-bold text-warning">{match.set1_home}</p>
                       {isSetComplete(match.set1_home,match.set1_away,1)&&(
                         <>
-                        <p className="me-3 p-2">{match.set2_home}</p>
+                        <p className="me-3 p-2 fw-bold text-warning">{match.set2_home}</p>
                         </>
 
                       )}
                       {isSetComplete(match.set2_home,match.set2_away,1)&&(
                         <>
-                        <p className="me-3 p-2">{match.set3_home}</p>
+                        <p className="me-3 p-2 fw-bold text-warning">{match.set3_home}</p>
                         </>
 
                       )}
                       {isSetComplete(match.set3_home,match.set3_away,1)&&(
                         <>
-                        <p className="me-3 p-2">{match.set4_home}</p>
+                        <p className="me-3 p-2 fw-bold text-warning">{match.set4_home}</p>
                         </>
 
                       )}
                       {isSetComplete(match.set4_home,match.set4_away,1)&&(
                         <>
-                        <p className="me-3 p-2">{match.set5_home}</p>
+                        <p className="me-3 p-2 fw-bold text-warning">{match.set5_home}</p>
                         </>
 
                       )}
@@ -338,39 +411,39 @@ const scrollContainerRef = useRef(null);
                   </div>
                   <div className="d-flex ">
                   <hr className="flex-grow-1"/>
-                  <h4 className="fw-bold">{new Date(match.match_date).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}</h4>
+                  <h4 className="fw-bold text-danger">{new Date(match.match_date).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}</h4>
                   </div>
                   {/* away team */}
-                  <div className="d-flex">
-                    <div className="d-flex gap-1" style={{minWidth:"200px"}}>
-                    <img src={imgurl+match.away_logo} alt="" style={{width:"40px",height:"40px",borderRadius:"50%"}}/>
+                  <div className="d-flex flex-nowrap">
+                    <div className="d-flex gap-1 match-team-block">
+                    <img src={imgurl+match.away_logo} alt="" onError={handleImgError} style={{width:"40px",height:"40px",borderRadius:"50%",flexShrink:0}}/>
                     <h4 className="p-2">{match.away_team}</h4>
                     </div>
                     {/* set score */}
                     {match.status==="Live"&&(
-                    <div className="d-flex mx-3">
-                      <p className="ms-2 me-3 p-2">{match.set1_away}</p>
+                    <div className="d-flex mx-3 flex-shrink-0">
+                      <p className="ms-2 me-3 p-2 fw-bold text-warning">{match.set1_away}</p>
                       {isSetComplete(match.set1_home,match.set1_away,1)&&(
                         <>
-                        <p className="me-3 p-2">{match.set2_away}</p>
+                        <p className="me-3 p-2 fw-bold text-warning">{match.set2_away}</p>
                         </>
 
                       )}
                       {isSetComplete(match.set2_home,match.set2_away,1)&&(
                         <>
-                        <p className="me-3 p-2">{match.set3_away}</p>
+                        <p className="me-3 p-2 fw-bold text-warning">{match.set3_away}</p>
                         </>
 
                       )}
                       {isSetComplete(match.set3_home,match.set3_away,1)&&(
                         <>
-                        <p className="me-3 p-2">{match.set4_away}</p>
+                        <p className="me-3 p-2 fw-bold text-warning">{match.set4_away}</p>
                         </>
 
                       )}
                       {isSetComplete(match.set4_home,match.set4_away,1)&&(
                         <>
-                        <p className="me-3 p-2">{match.set5_away}</p>
+                        <p className="me-3 p-2 fw-bold text-warning">{match.set5_away}</p>
                         </>
 
                       )}
@@ -394,7 +467,7 @@ const scrollContainerRef = useRef(null);
 {news.length > 0 && news[0] && (
   <div className="mt-3">
     <div className="d-flex justify-content-between align-items-center mb-3">
-    <h2 className="fw-bold mb-0">Latest News</h2>
+    <h2 className="section-heading fw-bold mb-0">Latest News</h2>
     <button className="btn btn-outline-warning me-3" onClick={()=>navigate("/viewnews")}>
       View All
     </button>
@@ -406,9 +479,9 @@ const scrollContainerRef = useRef(null);
     <div  className="card border-0"  ref={scrollContainerRef}  style={{ overflowX: "auto", whiteSpace: "nowrap", scrollBehavior: "smooth",}}>
   <div className="d-flex flex-nowrap border-0">
         {news.slice(0).map((item) => (
-          <div key={item.news_id} onClick={()=>navigate(`/newsdetails/${item.news_id}`)} style={{minWidth: "320px",maxWidth: "320px", flex: "0 0 auto",marginRight: "20px",borderRadius: "16px",overflow: "hidden",background: "#fff", boxShadow: "0 8px 24px rgba(0,0,0,0.12)",    cursor: "pointer",transition: "transform 0.3s ease, box-shadow 0.3s ease",}}onMouseEnter={(e) => {e.currentTarget.style.transform = "translateY(-6px)";e.currentTarget.style.boxShadow = "0 12px 32px rgba(0,0,0,0.18)";}}onMouseLeave={(e) => {e.currentTarget.style.transform = "translateY(0)";e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.12)";}}>
-            <div style={{ position: "relative", height: "420px",overflow: "hidden",}}>
-    <img src={imgurl + item.image}  alt={item.title} style={{width: "100%", height: "100%",objectFit: "cover",}}/>
+          <div key={item.news_id} onClick={()=>navigate(`/newsdetails/${item.news_id}`)} style={{minWidth: "260px",maxWidth: "320px", width:"80vw", flex: "0 0 auto",marginRight: "20px",borderRadius: "16px",overflow: "hidden",background: "#fff", boxShadow: "0 8px 24px rgba(0,0,0,0.12)",    cursor: "pointer",transition: "transform 0.3s ease, box-shadow 0.3s ease",}}onMouseEnter={(e) => {e.currentTarget.style.transform = "translateY(-6px)";e.currentTarget.style.boxShadow = "0 12px 32px rgba(0,0,0,0.18)";}}onMouseLeave={(e) => {e.currentTarget.style.transform = "translateY(0)";e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.12)";}}>
+            <div style={{ position: "relative", height: "320px",overflow: "hidden",}}>
+    <img src={imgurl + item.image}  alt={item.title} onError={handleImgError} style={{width: "100%", height: "100%",objectFit: "cover",}}/>
 
     {/* Dark gradient */}
     <div style={{position: "absolute",inset: 0,background:"linear-gradient(to top, rgba(0,0,0,.85), rgba(0,0,0,.1), transparent)",}}/>
@@ -419,7 +492,7 @@ const scrollContainerRef = useRef(null);
 
     {/* Title */}
     <div style={{position: "absolute",bottom: "20px",left: "20px",right: "20px",color: "#fff",}}>
-      <h5 style={{  margin: 0,  fontWeight: "700", lineHeight: "1.4",fontSize: "22px",}}>{item.title}</h5>
+      <h5 style={{  margin: 0,  fontWeight: "700", lineHeight: "1.4",fontSize: "clamp(16px, 4vw, 22px)",}}>{item.title}</h5>
     </div>
   </div>
 </div>
@@ -427,13 +500,13 @@ const scrollContainerRef = useRef(null);
       </div>
     </div>
 <div className="d-flex justify-content-center align-items-center gap-3 my-4">
-  <button onClick={scrollLeft}className="btn"style={{width: "50px",height: "50px",borderRadius: "50%",background: "#fff",border: "1px solid #ddd",boxShadow: "0 4px 10px rgba(0,0,0,0.12)",
-      fontSize: "22px",fontWeight: "bold",transition: "0.3s",}}onMouseEnter={(e) => {e.currentTarget.style.background = "#ffc107";e.currentTarget.style.transform = "scale(1.1)";}}onMouseLeave={(e) => {e.currentTarget.style.background = "#fff";e.currentTarget.style.transform = "scale(1)";}}>
+  <button onClick={scrollLeft}className="btn"style={{width: "50px",height: "50px",borderRadius: "50%",background: "#fff",border: "1px solid #ffc107",boxShadow: "0 4px 10px rgba(0,0,0,0.12)",
+      fontSize: "22px",fontWeight: "bold",transition: "0.3s",color:"#e30613"}}onMouseEnter={(e) => {e.currentTarget.style.background = "#ffc107";e.currentTarget.style.transform = "scale(1.1)";}}onMouseLeave={(e) => {e.currentTarget.style.background = "#fff";e.currentTarget.style.transform = "scale(1)";}}>
     &#10094;
   </button>
 
   <button
-    onClick={scrollRight}className="btn"style={{width: "50px",height: "50px",borderRadius: "50%",background: "#fff",border: "1px solid #ddd",boxShadow: "0 4px 10px rgba(0,0,0,0.12)",fontSize: "22px",fontWeight: "bold",transition: "0.3s",}}onMouseEnter={(e) => {e.currentTarget.style.background = "#ffc107";e.currentTarget.style.transform = "scale(1.1)";}}onMouseLeave={(e) => {e.currentTarget.style.background = "#fff";e.currentTarget.style.transform = "scale(1)";}}>
+    onClick={scrollRight}className="btn"style={{width: "50px",height: "50px",borderRadius: "50%",background: "#fff",border: "1px solid #ffc107",boxShadow: "0 4px 10px rgba(0,0,0,0.12)",fontSize: "22px",fontWeight: "bold",transition: "0.3s",color:"#e30613"}}onMouseEnter={(e) => {e.currentTarget.style.background = "#ffc107";e.currentTarget.style.transform = "scale(1.1)";}}onMouseLeave={(e) => {e.currentTarget.style.background = "#fff";e.currentTarget.style.transform = "scale(1)";}}>
     &#10095;
   </button>
 </div>
@@ -443,15 +516,15 @@ const scrollContainerRef = useRef(null);
 {/* TEAMS */}
 
 <div className="container mt-5 mb-5 ">
-<h3>Teams</h3>
-<div className="row">
+<h3 className="section-heading">Teams</h3>
+<div className="row g-3">
 
 {clubs.map(club=>(
-<div className="col-md-1 col-sm-6 mb-3 me-4" key={club.id}onClick={()=>navigate(`/club/${club.id}`)}style={{cursor:"pointer"}}>
-<div className="card text-center p-6 bg-transparent border-0">
-<img src={imgurl+club.logo}alt={club.name}style={{height:"100px",width:"100px",objectFit:"cover",borderRadius:"50%",margin:"auto"}}/>
+<div className="col-4 col-sm-3 col-md-2 col-lg-1 mb-3" key={club.id}onClick={()=>navigate(`/club/${club.id}`)}style={{cursor:"pointer"}}>
+<div className="card team-card text-center bg-transparent border-0">
+<img src={imgurl+club.logo}alt={club.name}onError={handleImgError}style={{height:"80px",width:"80px",objectFit:"cover",borderRadius:"50%",margin:"auto"}}/>
 
-<h6 className="mt-3">
+<h6 className="mt-2" style={{fontSize:"0.8rem"}}>
 
 {club.name}
 
